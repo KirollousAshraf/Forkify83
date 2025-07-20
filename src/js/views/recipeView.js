@@ -1,34 +1,34 @@
 class RecipeView {
-    #parentElement = document.querySelector('.recipe');
-    #data;
+  #parentElement = document.querySelector('.recipe');
+  #data;
 
-    render(data) {
-        this.#data = data;
-        const markup = this.#genareteMarkup();
-        this.#clear(); // Clear the html because iam insert the code not to replace and have some code of html we clear it
-        this.#parentElement.insertAdjacentHTML('afterbegin', markup);
-    };
+  render(data) {
+    this.#data = data;
+    const markup = this.#genareteMarkup();
+    this.#clear(); // Clear the html because iam insert the code not to replace and have some code of html we clear it
+    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+  };
 
-    #clear() {
-        this.#parentElement.innerHTML = '';
-    }
+  #clear() {
+    this.#parentElement.innerHTML = '';
+  }
 
-    renderSpinner = function () {
-        const markup = `
+  renderSpinner = function () {
+    const markup = `
        <div class="spinner">
           <svg>
             <use href="src/img/icons.svg#icon-loader"></use>
           </svg>
         </div>
   `;
-        this.#clear();
-        this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
 
-    }
+  }
 
-    #genareteMarkup() {
+  #genareteMarkup() {
 
-        return `
+    return `
          <figure class="recipe__fig">
           <img src="${this.#data.image}" alt="${this.#data.title}" class="recipe__img" />
           <h1 class="recipe__title">
@@ -105,10 +105,10 @@ class RecipeView {
           </a>
         </div>
     `;
-    }
+  }
 
-    #genarateMarkupIngredients(ing) {
-        return `
+  #genarateMarkupIngredients(ing) {
+    return `
         <li class="recipe__ingredient">
               <svg class="recipe__icon">
                 <use href="src/img/icons.svg#icon-check"></use>
@@ -121,8 +121,12 @@ class RecipeView {
             </li>
         
         `;
-    }
+  }
 
+  addHandlerEvents(handler) {
+    const events = ['hashchange', 'load'];
+    events.forEach(event => window.addEventListener(event, handler));
+  }
 };
 
 export default new RecipeView();
