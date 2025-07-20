@@ -1,6 +1,8 @@
 class RecipeView {
   #parentElement = document.querySelector('.recipe');
   #data;
+  #errorMessage = `We Cant Find a Recipe ! Please Try Agian`;
+
 
   render(data) {
     this.#data = data;
@@ -126,7 +128,22 @@ class RecipeView {
   addHandlerEvents(handler) {
     const events = ['hashchange', 'load'];
     events.forEach(event => window.addEventListener(event, handler));
-  }
+  };
+
+  renderErrorMessage(message = this.#errorMessage) {
+    const markup = `
+         <div class="error">
+            <div>
+              <svg>
+                <use href="src/img/icons.svg#icon-alert-triangle"></use>
+              </svg>
+            </div>
+            <p>${message}</p>
+          </div>
+    `;
+    this.#clear();
+    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+  };
 };
 
 export default new RecipeView();
