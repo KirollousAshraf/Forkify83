@@ -1,14 +1,12 @@
 import { API_URL } from "./config.js";
+import { getJSON } from "./helpers.js";
 export const state = {
     recipe: {},
 }
 
 export const loadRecipe = async function (id) {
     try {
-        const res = await fetch(`${API_URL}/${id}`);
-        const data = await res.json();
-        if (!res.ok) throw new Error(`${data.message} ${res.status}`);
-        console.log(res, data);
+        const data = await getJSON(`${API_URL}/${id}`);
         // Recreate the object of data but with my syntax
         let { recipe } = data.data;
         state.recipe = {
