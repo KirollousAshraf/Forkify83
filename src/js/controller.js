@@ -1,12 +1,9 @@
 import * as model from './model.js';
 import recipeview from './views/recipeView.js';
-const recipeContainer = document.querySelector('.recipe');
-
+import searchview from './views/searchView.js';
+import resultsview from './views/resultsView.js';
 
 ///////////////////////////////////////
-
-
-
 const controlRecipe = async function () {
   try {
     // get the id automatic when click the anchor
@@ -29,7 +26,33 @@ const controlRecipe = async function () {
 
 };
 
+
+const controlSearchResults = async function () {
+  try {
+    resultsview.renderSpinner();
+
+    // Get query from Search Value
+    const query = searchview.getQuery();
+    if (!query) return;
+
+    // loading Search recipe
+    await model.loadSearchResults(query);
+
+    // render Search results to user
+    resultsview.render(model.state.search.results);
+
+
+  } catch (err) {
+    console.error(err);
+
+  }
+
+
+}
+
+
 const init = function () {
   recipeview.addHandlerEvents(controlRecipe);
+  searchview.addHandlerSearch(controlSearchResults)
 }
 init();
