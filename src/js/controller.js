@@ -2,7 +2,7 @@ import * as model from './model.js';
 import recipeview from './views/recipeView.js';
 import searchview from './views/searchView.js';
 import resultsview from './views/resultsView.js';
-
+import paginationview from './views/paginationView.js';
 ///////////////////////////////////////
 const controlRecipe = async function () {
   try {
@@ -39,20 +39,30 @@ const controlSearchResults = async function () {
     await model.loadSearchResults(query);
 
     // render Search results to user
-    resultsview.render(model.state.search.results);
+    // resultsview.render(model.state.search.results);
+    resultsview.render(model.searchResultsPage());
 
+    // render pagination buttons when user search a recipe
+    paginationview.render(model.state.search)
 
   } catch (err) {
     console.error(err);
+  };
+};
 
-  }
+const controlPaginationButtons = function (goToPage) {
 
+  // render Search results to user
+  resultsview.render(model.searchResultsPage(goToPage));
+
+  // render pagination buttons when user search a recipe
+  paginationview.render(model.state.search)
 
 }
 
-
 const init = function () {
   recipeview.addHandlerEvents(controlRecipe);
-  searchview.addHandlerSearch(controlSearchResults)
+  searchview.addHandlerSearch(controlSearchResults);
+  paginationview.addHandlerClick(controlPaginationButtons);
 }
 init();
