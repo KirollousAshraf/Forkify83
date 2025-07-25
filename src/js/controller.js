@@ -15,10 +15,7 @@ const controlRecipe = async function () {
     // Loading Recipe and show the result into console not to user
     await model.loadRecipe(id);
     // Show Recipe to User in Html
-    recipeview.render(model.state.recipe)
-
-
-
+    recipeview.render(model.state.recipe);
   } catch (err) {
     // Show the Error Message to user
     recipeview.renderErrorMessage();
@@ -58,11 +55,23 @@ const controlPaginationButtons = function (goToPage) {
   // render pagination buttons when user search a recipe
   paginationview.render(model.state.search)
 
-}
+};
+
+const controlServings = function (newServings) {
+
+  // Update serving recipe
+  model.updateServings(newServings);
+
+  // Update to show the new Recipe for user
+  recipeview.render(model.state.recipe);
+
+};
 
 const init = function () {
   recipeview.addHandlerEvents(controlRecipe);
+  recipeview.addHandlerUpdateServings(controlServings)
   searchview.addHandlerSearch(controlSearchResults);
   paginationview.addHandlerClick(controlPaginationButtons);
+
 }
 init();
