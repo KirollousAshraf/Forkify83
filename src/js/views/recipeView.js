@@ -1,35 +1,38 @@
 import View from "./View.js";
-
+////////////////////////////////////
 class RecipeView extends View {
   _parentElement = document.querySelector('.recipe');
-  _errorMessage = `We Cant Find a Recipe ! Please Try Agian`;
+  _errorMessage = `We Can Not Find A Recipe ! Please Try Agian`;
+  _message = ``;
 
+  addHendlerRender(hendler) {
 
-  addHandlerEvents(handler) {
     const events = ['hashchange', 'load'];
-    events.forEach(event => window.addEventListener(event, handler));
-  };
+    events.forEach(event => window.addEventListener(event, hendler));
+  }
 
-  addHandlerUpdateServings(handler) {
+  addHendlerUpdateServings(handler) {
     this._parentElement.addEventListener('click', function (e) {
-      const btn = e.target.closest('.btn--tiny');
+      const btn = e.target.closest('.btn--update-servings');
       if (!btn) return;
       const updateTo = +btn.dataset.updateTo;
       if (updateTo > 0) handler(updateTo);
+
     });
   };
 
-  addHandlerAddBookmark(handler) {
+  addHendlerAddBookmark(handler) {
     this._parentElement.addEventListener('click', function (e) {
-      const btn = e.target.closest('.btn--bookmarked');
+      const btn = e.target.closest('.btn--bookmark');
       if (!btn) return;
       handler();
-    })
-  }
+    });
+  };
 
-  _genareteMarkup() {
+
+  _generateMarkup() {
     return `
-         <figure class="recipe__fig">
+        <figure class="recipe__fig">
           <img src="${this._data.image}" alt="${this._data.title}" class="recipe__img" />
           <h1 class="recipe__title">
             <span>${this._data.title}</span>
@@ -43,16 +46,15 @@ class RecipeView extends View {
             </svg>
             <span class="recipe__info-data recipe__info-data--minutes">${this._data.cookingTime}</span>
             <span class="recipe__info-text">minutes</span>
-        </div>
-
-        <div class="recipe__info">
+          </div>
+          <div class="recipe__info">
             <svg class="recipe__info-icon">
               <use href="src/img/icons.svg#icon-users"></use>
             </svg>
             <span class="recipe__info-data recipe__info-data--people">${this._data.servings}</span>
             <span class="recipe__info-text">servings</span>
 
-          <div class="recipe__info-buttons">
+            <div class="recipe__info-buttons">
               <button class="btn--tiny btn--update-servings" data-update-to='${this._data.servings - 1}'>
                 <svg>
                   <use href="src/img/icons.svg#icon-minus-circle"></use>
@@ -71,10 +73,9 @@ class RecipeView extends View {
               <use href="src/img/icons.svg#icon-user"></use>
             </svg>
           </div>
-
-          <button class="btn--round btn--bookmarked">
+          <button class="btn--round btn--bookmark">
             <svg class="">
-              <use href="src/img/icons.svg#icon-bookmark${this._data.bookmarked ? '-fill' : ''}"></use>
+              <use href="src/img/icons.svg#icon-bookmark${this._data.bookmarked ? '-fill' : ''}"></use> 
             </svg>
           </button>
         </div>
@@ -82,8 +83,7 @@ class RecipeView extends View {
         <div class="recipe__ingredients">
           <h2 class="heading--2">Recipe ingredients</h2>
           <ul class="recipe__ingredient-list">
-          ${this._data.ingredients.map(this._genarateMarkupIngredients).join('')}
-          </ul>
+          ${this._data.ingredients.map(this._generateMarkupIngredients).join('')}    
         </div>
 
         <div class="recipe__directions">
@@ -104,12 +104,12 @@ class RecipeView extends View {
             </svg>
           </a>
         </div>
-    `;
-  }
+        `;
+  };
 
-  _genarateMarkupIngredients(ing) {
+  _generateMarkupIngredients(ing) {
     return `
-        <li class="recipe__ingredient">
+    <li class="recipe__ingredient">
               <svg class="recipe__icon">
                 <use href="src/img/icons.svg#icon-check"></use>
               </svg>
@@ -118,26 +118,11 @@ class RecipeView extends View {
                 <span class="recipe__unit">${ing.unit}</span>
                 ${ing.description}
               </div>
-            </li>
-        
-        `;
-  }
-
-
-  renderErrorMessage(message = this._errorMessage) {
-    const markup = `
-         <div class="error">
-            <div>
-              <svg>
-                <use href="src/img/icons.svg#icon-alert-triangle"></use>
-              </svg>
-            </div>
-            <p>${message}</p>
-          </div>
+            </li>      
+    
+    
     `;
-    this._clear();
-    this._parentElement.insertAdjacentHTML('afterbegin', markup);
   };
 };
 
-export default new RecipeView();
+export default new RecipeView(); 

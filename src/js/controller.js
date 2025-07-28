@@ -3,77 +3,82 @@ import recipeview from './views/recipeView.js';
 import searchview from './views/searchView.js';
 import resultsview from './views/resultsView.js';
 import paginationview from './views/paginationView.js';
+import bookmarksview from './views/bookmarksView.js';
+
+
+// NEW API URL (instead of the one shown in the video)
+// https://forkify-api.jonas.io
+
 ///////////////////////////////////////
-const controlRecipe = async function () {
+const controlRecipes = async function () {
   try {
-    // get the id automatic when click the anchor
+
     const id = window.location.hash.slice(1);
     if (!id) return;
 
-    // show the selected recipe when user is selected 
-    resultsview.render(model.searchResultsPage());
-
-
-    // Show user a loading spinner
+    // Render the spinner
     recipeview.renderSpinner();
 
-    // Loading Recipe and show the result into console not to user
+    // render results view to mark selected search results
+    resultsview.render(model.getSearchResultsPage());
+    bookmarksview.render(model.state.bookmarks);
+
+
+    // Loading Recipe
     await model.loadRecipe(id);
 
-    // Show Recipe to User in Html
+    // Render recipe for user
     recipeview.render(model.state.recipe);
-
   } catch (err) {
-    // Show the Error Message to user
+    // Render error message for user
     recipeview.renderErrorMessage();
     console.error(err);
-  }
 
+  }
 };
 
 
 const controlSearchResults = async function () {
   try {
+    // Render the spinner
     resultsview.renderSpinner();
 
-    // Get query from Search Value
+    // Get Search Query
     const query = searchview.getQuery();
     if (!query) return;
 
-    // loading Search recipe
+    // Loading Search Results
     await model.loadSearchResults(query);
 
-    // render Search results to user
-    // resultsview.render(model.state.search.results);
-    resultsview.render(model.searchResultsPage());
+    // Render Search Results for user
+    // resultsview.render(model.state.search.results); 
+    resultsview.render(model.getSearchResultsPage());
 
-    // render pagination buttons when user search a recipe
-    paginationview.render(model.state.search)
-
+    // Render Pagination Buttons
+    paginationview.render(model.state.search);
   } catch (err) {
     console.error(err);
   };
 };
 
-const controlPaginationButtons = function (goToPage) {
 
-  // render Search results to user
-  resultsview.render(model.searchResultsPage(goToPage));
+const controlPaginationbutton = function (goToPage) {
+  // Render New Search Results for user
+  resultsview.render(model.getSearchResultsPage(goToPage));
 
-  // render pagination buttons when user search a recipe
-  paginationview.render(model.state.search)
-
+  // Render New Pagination Buttons
+  paginationview.render(model.state.search);
 };
+
 
 const controlServings = function (newServings) {
-
-  // Update serving recipe
+  // Update the recipe servings (in state)
   model.updateServings(newServings);
 
-  // Update to show the new Recipe for user
+  // Update the recipe view
   recipeview.render(model.state.recipe);
-
 };
+
 
 const controlAddBookmark = function () {
   if (!model.state.recipe.bookmarked) {
@@ -81,18 +86,22 @@ const controlAddBookmark = function () {
   } else {
     model.deleteBookmark(model.state.recipe.id)
   }
+  console.log(model.state.recipe);
 
-
-  // Update to show the new Recipe for user
+  // Update the recipe view
   recipeview.render(model.state.recipe);
-}
+
+  // Render a bookmarks to user
+  bookmarksview.render(model.state.bookmarks);
+
+};
 
 const init = function () {
-  recipeview.addHandlerEvents(controlRecipe);
-  recipeview.addHandlerUpdateServings(controlServings)
-  recipeview.addHandlerAddBookmark(controlAddBookmark)
+  recipeview.addHendlerRender(controlRecipes);
+  recipeview.addHendlerUpdateServings(controlServings);
+  recipeview.addHendlerAddBookmark(controlAddBookmark);
   searchview.addHandlerSearch(controlSearchResults);
-  paginationview.addHandlerClick(controlPaginationButtons);
+  paginationview.addHandlerClick(controlPaginationbutton);
 
 }
 init();

@@ -1,21 +1,26 @@
 export default class View {
   _data;
 
-  render(data) {
+  render(data, render = true) {
+
     if (!data || (Array.isArray(data) && data.length === 0)) return this.renderErrorMessage();
     this._data = data;
-    const markup = this._genareteMarkup();
-    this._clear(); // Clear the html because iam insert the code not to replace and have some code of html we clear it
+
+    const markup = this._generateMarkup();
+
+    if (!render) return markup;
+
+    this._clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   };
 
   _clear() {
     this._parentElement.innerHTML = '';
-  }
+  };
 
-  renderSpinner = function () {
+  renderSpinner() {
     const markup = `
-       <div class="spinner">
+        <div class="spinner">
           <svg>
             <use href="src/img/icons.svg#icon-loader"></use>
           </svg>
@@ -23,8 +28,8 @@ export default class View {
   `;
     this._clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
+  };
 
-  }
 
   renderErrorMessage(message = this._errorMessage) {
     const markup = `
@@ -37,6 +42,21 @@ export default class View {
             <p>${message}</p>
           </div>
     `;
+    this._clear();
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
+  };
+
+  renderMessage(message = this._message) {
+    const markup = `
+       <div class="message">
+        <div>
+          <svg>
+            <use href="src/img/icons.svg#icon-smile"></use>
+          </svg>
+        </div>
+        <p>Start by searching for a recipe or an ingredient. Have fun!</p>
+      </div>
+    `
     this._clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   };

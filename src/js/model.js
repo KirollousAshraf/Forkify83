@@ -1,6 +1,6 @@
-import { API_URL, RES_PER_PAGE } from "./config.js";
-import { getJSON } from "./helpers.js";
-////////////////////////////////////////////////////////
+import { API_URL, RES_PER_PAGE } from './config.js';
+import { getJSON } from './helpers.js';
+
 
 export const state = {
     recipe: {},
@@ -12,29 +12,37 @@ export const state = {
     },
     bookmarks: [],
 };
-console.log(state);
+// console.log(state);
+
+
+
 
 export const loadRecipe = async function (id) {
     try {
         const data = await getJSON(`${API_URL}${id}`);
-        // Recreate the object of data but with my syntax
-        let { recipe } = data.data;
+        // console.log(data);
+
+
+        const { recipe } = data.data;
         state.recipe = {
             id: recipe.id,
-            image: recipe.image_url,
-            publisher: recipe.publisher,
-            ingredients: recipe.ingredients,
             title: recipe.title,
-            cookingTime: recipe.cooking_time,
+            publisher: recipe.publisher,
             sourceUrl: recipe.source_url,
+            image: recipe.image_url,
             servings: recipe.servings,
-        };
+            cookingTime: recipe.cooking_time,
+            ingredients: recipe.ingredients
+        }
+        console.log(state.recipe);
+
 
         if (state.bookmarks.some(bookmark => bookmark.id === id)) {
             state.recipe.bookmarked = true;
         } else {
             state.recipe.bookmarked = false;
-        }
+
+        };
 
     } catch (err) {
         console.error(`${err} 🔴🔴🔴`);
@@ -43,31 +51,30 @@ export const loadRecipe = async function (id) {
     };
 };
 
+
 export const loadSearchResults = async function (query) {
     try {
         state.search.query = query;
-        // console.log(state.search.query);
-
         const data = await getJSON(`${API_URL}?search=${query}`);
         // console.log(data);
 
         state.search.results = data.data.recipes.map(recipe => {
             return {
                 id: recipe.id,
-                image: recipe.image_url,
-                publisher: recipe.publisher,
                 title: recipe.title,
+                publisher: recipe.publisher,
+                image: recipe.image_url,
             };
         });
-
-        state.search.page = 1;
     } catch (err) {
         console.error(`${err} 🔴🔴🔴`);
         throw err;
-    }
+    };
+    state.search.page = 1;
 };
 
-export const searchResultsPage = function (page = state.search.page) {
+
+export const getSearchResultsPage = function (page = state.search.page) {
     state.search.page = page;
     // console.log(state.search.page);
 
@@ -76,7 +83,9 @@ export const searchResultsPage = function (page = state.search.page) {
     return state.search.results.slice(start, end);
 };
 
+
 export const updateServings = function (newServings) {
+
     state.recipe.ingredients.forEach(ingredient => {
         ingredient.quantity = (ingredient.quantity * newServings) / state.recipe.servings;
     });
@@ -84,17 +93,35 @@ export const updateServings = function (newServings) {
     state.recipe.servings = newServings;
 };
 
+
+// Fucntions of BookMarks //
+const setBookmarksToLocalStorage = function () {
+    localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
+};
+
+
 export const addBookmark = function (recipe) {
     state.bookmarks.push(recipe);
-    console.log(state.bookmarks);
-
     if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
+
+
+    setBookmarksToLocalStorage();
 };
 
 export const deleteBookmark = function (id) {
     const index = state.bookmarks.findIndex(bookmark => bookmark.id === id);
+
     state.bookmarks.splice(index, 1);
 
-
     if (id === state.recipe.id) state.recipe.bookmarked = false;
+
+    setBookmarksToLocalStorage();
+
 };
+
+const init = function () {
+    const storage = localStorage.getItem('bookmarks');
+    if (storage) state.bookmarks = JSON.parse(storage);
+}
+init();
+console.log(state.bookmarks);
