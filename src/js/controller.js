@@ -19,6 +19,7 @@ const controlRecipe = async function () {
   } catch (err) {
     // Show the Error Message to user
     recipeview.renderErrorMessage();
+    console.error(err);
   }
 
 };
