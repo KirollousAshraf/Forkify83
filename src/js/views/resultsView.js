@@ -1,16 +1,17 @@
 import View from "./View.js";
 class ResultsView extends View {
-    _parentElement = document.querySelector('.results');
-    _errorMessage = `We Cant Find a Recipe For Your Query ! Please Try Agian`;
+  _parentElement = document.querySelector('.results');
+  _errorMessage = `We Cant Find a Recipe For Your Query ! Please Try Agian`;
 
-    _genareteMarkup() {
-        return this._data.map(this._generateMarkupPreview).join('');
-    };
+  _genareteMarkup() {
+    return this._data.map(this._generateMarkupPreview).join('');
+  };
 
-    _generateMarkupPreview(res) {
-        return `
+  _generateMarkupPreview(res) {
+    const id = window.location.hash.slice(1);
+    return `
         <li class="preview">
-            <a class="preview__link" href="#${res.id}">
+            <a class="preview__link ${res.id === id ? 'preview__link--active' : ''}" href="#${res.id}">
               <figure class="preview__fig">
                 <img src="${res.image}" alt="${res.title}" />
               </figure>
@@ -26,7 +27,7 @@ class ResultsView extends View {
             </a>
         </li>
         `
-    }
+  }
 };
 
 export default new ResultsView();

@@ -10,12 +10,19 @@ const controlRecipe = async function () {
     const id = window.location.hash.slice(1);
     if (!id) return;
 
+    // show the selected recipe when user is selected 
+    resultsview.render(model.searchResultsPage());
+
+
     // Show user a loading spinner
     recipeview.renderSpinner();
+
     // Loading Recipe and show the result into console not to user
     await model.loadRecipe(id);
+
     // Show Recipe to User in Html
     recipeview.render(model.state.recipe);
+
   } catch (err) {
     // Show the Error Message to user
     recipeview.renderErrorMessage();
