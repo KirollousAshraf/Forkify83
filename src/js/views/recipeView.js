@@ -5,6 +5,11 @@ class RecipeView extends View {
   _errorMessage = `We Cant Find a Recipe ! Please Try Agian`;
 
 
+  addHandlerEvents(handler) {
+    const events = ['hashchange', 'load'];
+    events.forEach(event => window.addEventListener(event, handler));
+  };
+
   addHandlerUpdateServings(handler) {
     this._parentElement.addEventListener('click', function (e) {
       const btn = e.target.closest('.btn--tiny');
@@ -13,6 +18,14 @@ class RecipeView extends View {
       if (updateTo > 0) handler(updateTo);
     });
   };
+
+  addHandlerAddBookmark(handler) {
+    this._parentElement.addEventListener('click', function (e) {
+      const btn = e.target.closest('.btn--bookmarked');
+      if (!btn) return;
+      handler();
+    })
+  }
 
   _genareteMarkup() {
     return `
@@ -59,9 +72,9 @@ class RecipeView extends View {
             </svg>
           </div>
 
-          <button class="btn--round">
+          <button class="btn--round btn--bookmarked">
             <svg class="">
-              <use href="src/img/icons.svg#icon-bookmark-fill"></use>
+              <use href="src/img/icons.svg#icon-bookmark${this._data.bookmarked ? '-fill' : ''}"></use>
             </svg>
           </button>
         </div>
@@ -110,10 +123,6 @@ class RecipeView extends View {
         `;
   }
 
-  addHandlerEvents(handler) {
-    const events = ['hashchange', 'load'];
-    events.forEach(event => window.addEventListener(event, handler));
-  };
 
   renderErrorMessage(message = this._errorMessage) {
     const markup = `
