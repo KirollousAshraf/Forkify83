@@ -4,6 +4,7 @@ import searchview from './views/searchView.js';
 import resultsview from './views/resultsView.js';
 import paginationview from './views/paginationView.js';
 import bookmarksview from './views/bookmarksView.js';
+import addrecipeview from './views/addrecipeView.js';
 
 
 // NEW API URL (instead of the one shown in the video)
@@ -58,6 +59,7 @@ const controlSearchResults = async function () {
     paginationview.render(model.state.search);
   } catch (err) {
     console.error(err);
+
   };
 };
 
@@ -96,12 +98,16 @@ const controlAddBookmark = function () {
 
 };
 
+const controlAddRecipe = function (newRecipe) {
+  console.log(newRecipe);
+};
+
 const init = function () {
   recipeview.addHendlerRender(controlRecipes);
   recipeview.addHendlerUpdateServings(controlServings);
   recipeview.addHendlerAddBookmark(controlAddBookmark);
   searchview.addHandlerSearch(controlSearchResults);
   paginationview.addHandlerClick(controlPaginationbutton);
-
+  addrecipeview.addHandlerUpload(controlAddRecipe)
 }
 init();
