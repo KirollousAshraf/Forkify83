@@ -5,13 +5,13 @@ class RecipeView extends View {
   _errorMessage = `We Can Not Find A Recipe ! Please Try Agian`;
   _message = ``;
 
-  addHendlerRender(hendler) {
+  addHandlerRender(hendler) {
 
     const events = ['hashchange', 'load'];
     events.forEach(event => window.addEventListener(event, hendler));
   }
 
-  addHendlerUpdateServings(handler) {
+  addHandlerUpdateServings(handler) {
     this._parentElement.addEventListener('click', function (e) {
       const btn = e.target.closest('.btn--update-servings');
       if (!btn) return;
@@ -21,7 +21,7 @@ class RecipeView extends View {
     });
   };
 
-  addHendlerAddBookmark(handler) {
+  addHandlerAddBookmark(handler) {
     this._parentElement.addEventListener('click', function (e) {
       const btn = e.target.closest('.btn--bookmark');
       if (!btn) return;

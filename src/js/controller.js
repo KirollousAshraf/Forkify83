@@ -103,9 +103,9 @@ const controlAddRecipe = function (newRecipe) {
 };
 
 const init = function () {
-  recipeview.addHendlerRender(controlRecipes);
-  recipeview.addHendlerUpdateServings(controlServings);
-  recipeview.addHendlerAddBookmark(controlAddBookmark);
+  recipeview.addHandlerRender(controlRecipes);
+  recipeview.addHandlerUpdateServings(controlServings);
+  recipeview.addHandlerAddBookmark(controlAddBookmark);
   searchview.addHandlerSearch(controlSearchResults);
   paginationview.addHandlerClick(controlPaginationbutton);
   addrecipeview.addHandlerUpload(controlAddRecipe)
