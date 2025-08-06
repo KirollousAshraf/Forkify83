@@ -54,7 +54,7 @@ export default class View {
             <use href="src/img/icons.svg#icon-smile"></use>
           </svg>
         </div>
-        <p>Start by searching for a recipe or an ingredient. Have fun!</p>
+        <p>${message}</p>
       </div>
     `
     this._clear();
